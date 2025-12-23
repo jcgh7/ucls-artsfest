@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="module" src="/src/main.js"></script>
+        <script type="module" src="/src/firebase.js"></script>
+        <script type="module">
+            import { getUser, logout, onUserChanged } from "/src/main.js";
+            document.getElementById("hello").onclick = function(){
+                let user = getUser();
+                alert(user.uid);
+            }
+            document.getElementById("goodbye").onclick = function(){
+                logout();
+            }
+            onUserChanged(user => {
+                document.getElementById("name").innerHTML = user.displayName;
+            })
+        </script>
+    </head>
+    <body>
+        <h1 id="login">login</h1>
+        <h2 id="hello">hello</h2>
+        <h2 id="goodbye">goodbye</h2>
+        <h2 id="name">name</h2>
+    </body>
+</html>
