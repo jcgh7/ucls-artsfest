@@ -1,0 +1,79 @@
+/* lmao i suck at css */
+*, html {
+    margin:0;
+    padding:0;  
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.navBar{
+    width:100%;
+    margin:0;
+    padding:0;
+    height:100px;
+    background-color:maroon;
+    display: flex;
+    align-items: center; 
+    color:white;
+}
+
+.navBarRight{
+    margin-left:auto;
+    margin-right:15px;
+    font-size:20px;
+}
+
+.navBarItem:hover{
+    color:#00B2A9;
+    cursor: pointer;
+}
+
+.navBarItem{
+    margin:10px;
+    transition:0.5s;
+}
+
+@font-face{
+  font-family: logoFont;
+  src: url("/src/OldLondonAlternate.ttf");
+}
+.logo{
+    font-family:logoFont;
+    font-size:70px;
+    margin:10px;
+    transition:0.5s;
+}
+
+.logo:hover{
+    color:#00B2A9;
+    cursor: pointer;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gridContainer{
+  margin: 50px;
+}
+
+.box {
+  width: 250px;
+  height: 250px;
+  border: 3px solid grey;
+  border-radius: 5px;
+  padding:15px;
+}
+
+.title{
+    font-size:60px;
+}
+
+.subTitle{
+    font-size:30px;
+}
+
+.infoContainer{
+    margin:50px;
+}

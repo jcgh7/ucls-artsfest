@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script>
+        window.onload = ()=>{
+            const urlParams = new URLSearchParams(window.location.search);
+            document.getElementById("n").innerHTML = urlParams.get('n');
+            document.getElementById("d").innerHTML = urlParams.get('d');
+            p = urlParams.get("p");
+            if(p == 4){
+                p = "1 & 2";
+            }
+            document.getElementById("l").innerHTML = "Location: " + urlParams.get('l');
+            document.getElementById("p").innerHTML = "Period: " + p;
+            document.getElementById("c").innerHTML = "Capacity: " + urlParams.get('c');
+        }
+    </script>
+  </head>
+  <body>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem">About</span>|<span class="navBarItem">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="infoContainer">
+      <h3 class="title" id="n">Name</h3>
+      <p class="subTitle" id="d">Description</p>
+      <br>
+      <p class="subTitle" id="l">Location</p>
+      <p class="subTitle" id="p">Periods</p>
+      <p class="subTitle" id="c">Capacity</p>
+    </div>
+    <!-- <div class="gridContainer">
+      <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>
+      <div class="grid" id="p1">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 2</h1>
+      <div class="grid" id="p2">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Double Period 1 + 2</h1>
+      <div class="grid" id="p4">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 3</h1>
+      <div class="grid" id="p3">
+        
+      </div>
+    </div> -->
+  </body>
+</html>

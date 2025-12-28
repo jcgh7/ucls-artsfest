@@ -1,9 +1,79 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script type="module">
+      import { staticRead, liveRead, writeLoc } from "./src/main.js";
+      // liveRead("tests", (x)=>{console.log(x)});
+      // writeLoc("tests", "test1", "test4");
+      // writeLoc("tests", "test2", "hello!");
+      // writeLoc("tests", "test1", "test5");
+      // writeLoc("new", "Description", "This is the database sector for the 2026 refactor of the Artsfest code.");
+      // writeLoc("new/workshops/Test Workshop 3", "capacity", 5);
+      // writeLoc("new/workshops/Test Workshop 3", "description", "This is a test workshop");
+      // writeLoc("new/workshops/Test Workshop 3", "period", 4);
+      // writeLoc("new/workshops/Test Workshop 3", "signups", 0);
+      // writeLoc("new/workshops/Test Workshop 3", "location", "C501");
+
+      let workshopData = await staticRead("new/workshops");
+      Object.keys(workshopData).forEach(name => {
+        let workshopDetails = Object.values(workshopData[name]);
+        console.log("Name: ", name, "\nCapacity: ", workshopDetails[0], "\nDescription: ", workshopDetails[1]); //location 2, period 3, signups 4
+        let title = name;
+        let capacity = workshopDetails[0];
+        let description = workshopDetails[1];
+        let location = workshopDetails[2];
+        let period = workshopDetails[3];
+        let periodRender = workshopDetails[3];
+        if(period == 4){
+          periodRender = "1 & 2";
+        }
+        let render = `<div class="box">
+          <h1>${title}</h1>
+          <div style="color:grey;font-size:20px;margin-top:20px">
+            <b>Period: ${periodRender}</b>
+            <br>
+            <b>Capacity: ${capacity}</b>
+            <br>
+            <b>Location: ${location}</b>
+            <br>
+            <b><a href="/desc.html?d=${description}&n=${name}&l=${location}&p=${period}&c=${capacity}" target="_blank">Read Description</a></b>
+          </div>
+        </div>`;
+        document.getElementById("p"+period).innerHTML = document.getElementById("p"+period).innerHTML + render;
+      });
+
+      
+    </script>
   </head>
   <body>
-    
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem">About</span>|<span class="navBarItem">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="infoContainer">
+      <h3 class="title">Browse Workshops</h3>
+      <p class="subTitle">The program of workshops document is available <a href="">here</a>.</p>
+    </div>
+    <div class="gridContainer">
+      <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>
+      <div class="grid" id="p1">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 2</h1>
+      <div class="grid" id="p2">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Double Period 1 + 2</h1>
+      <div class="grid" id="p4">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 3</h1>
+      <div class="grid" id="p3">
+        
+      </div>
+    </div>
   </body>
 </html>
