@@ -11,16 +11,18 @@
       // writeLoc("tests", "test2", "hello!");
       // writeLoc("tests", "test1", "test5");
       // writeLoc("new", "Description", "This is the database sector for the 2026 refactor of the Artsfest code.");
-      // writeLoc("new/workshops/Test Workshop 3", "capacity", 5);
-      // writeLoc("new/workshops/Test Workshop 3", "description", "This is a test workshop");
-      // writeLoc("new/workshops/Test Workshop 3", "period", 4);
-      // writeLoc("new/workshops/Test Workshop 3", "signups", 0);
-      // writeLoc("new/workshops/Test Workshop 3", "location", "C501");
-
+      // writeLoc("new/workshops/Test Workshop 8", "capacity", 5);
+      // writeLoc("new/workshops/Test Workshop 8", "description", "This is a test workshop");
+      // writeLoc("new/workshops/Test Workshop 8", "period", 4);
+      // writeLoc("new/workshops/Test Workshop 8", "signups", 0);
+      // writeLoc("new/workshops/Test Workshop 8", "location", "C501");
+      //writeLoc("new/workshops/Test Workshop 3/signups-users", "BUna68oW41bywy2z3SlgIXU4JE22", 0);
+      // if((await staticRead("new/workshops/Test Workshop 3/signups-users/USER1"))==0){
+      //    console.log("balls")
+      // }
       let workshopData = await staticRead("new/workshops");
       Object.keys(workshopData).forEach(name => {
         let workshopDetails = Object.values(workshopData[name]);
-        console.log("Name: ", name, "\nCapacity: ", workshopDetails[0], "\nDescription: ", workshopDetails[1]); //location 2, period 3, signups 4
         let title = name;
         let capacity = workshopDetails[0];
         let description = workshopDetails[1];
@@ -49,7 +51,7 @@
     </script>
   </head>
   <body>
-    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem">About</span>|<span class="navBarItem">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem">About</span>|<span class="navBarItem"onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
     <div class="infoContainer">
       <h3 class="title">Browse Workshops</h3>
       <p class="subTitle">The program of workshops document is available <a href="">here</a>.</p>

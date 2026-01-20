@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<!-- worst code i've ever written holy-->
+
+<head>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script type="module">
+        import { staticRead, liveRead, writeLoc, getUser, current } from "./src/main.js";
+        async function handleSignup(data, status) {
+
+            writeLoc("new/workshops/" + data + "/signups-users", document.cookie, status);
+            if(status == 1){
+                writeLoc("new/workshops/" + data, "signups", (await staticRead("new/workshops/" + data + "/signups"))-1);
+            }
+            else{
+                writeLoc("new/workshops/" + data, "signups", (await staticRead("new/workshops/" + data + "/signups"))+1);
+            }
+        }
+        function renderWorkshops(data) {
+            document.getElementById("p1").innerHTML = "";
+            document.getElementById("p2").innerHTML = "";
+            document.getElementById("p3").innerHTML = "";
+            document.getElementById("p4").innerHTML = "";
+            let uid = document.cookie;
+            let userPeriods = [false, false, false, false]; //p1, p2, p3, p12
+            Object.keys(data).forEach(name => {
+                let workshopDetails = Object.values(data[name]);
+                let period = workshopDetails[3];
+                let signupsUsers = workshopDetails[5];
+                if (signupsUsers != undefined) {
+                    Object.entries(signupsUsers).forEach(([user, value]) => {
+                        if (user == uid && value == 0) {
+                            userPeriods[period - 1] = true;
+                            if (period == 4) {
+                                userPeriods[0] = true;
+                                userPeriods[1] = true;
+                            }
+                        }
+                    }
+                    );
+                }
+            })
+            Object.keys(data).forEach(name => {
+                let workshopDetails = Object.values(data[name]);
+                let title = name;
+                let capacity = workshopDetails[0];
+                let description = workshopDetails[1];
+                let location = workshopDetails[2];
+                let period = workshopDetails[3];
+                let periodRender = workshopDetails[3];
+                let signups = workshopDetails[4];
+                let signupsUsers = workshopDetails[5];
+                if (period == 4) {
+                    periodRender = "1 & 2";
+                }
+                let render = "";
+                if (signupsUsers != undefined) {
+                    Object.entries(signupsUsers).forEach(([user, value]) => {
+                        if (user == uid && value == 0) {
+                            render = `<div class="box">
+                            <h1>${title}</h1>
+                            <div style="color:grey;font-size:20px;margin-top:20px">
+                                <b>Period: ${periodRender}</b>
+                                <br>
+                                <b>Location: ${location}</b>
+                                <br><br>
+                                <b style="color:black;font-size:30px">Signups: ${signups}/${capacity}</b>
+                                <br>
+                                <button style="font-size:25px" class='signupTrigger' id='${title}' data-title='${title}' data-status=1 type='button'>Remove signup</button>
+                            </div>
+                            </div>`;
+                        }
+                    });
+                }
+                if (userPeriods[period-1] && render == "") {
+                    render = `<div class="box">
+                    <h1>${title}</h1>
+                    <div style="color:grey;font-size:20px;margin-top:20px">
+                        <b>Period: ${periodRender}</b>
+                        <br>
+                        <b>Location: ${location}</b>
+                        <br><br>
+                        <b style="color:black;font-size:30px">Signups: ${signups}/${capacity}</b>
+                    </div>
+                    </div>`;
+                }
+                else if (signups < capacity && render == "") {
+                    render = `<div class="box">
+                    <h1>${title}</h1>
+                    <div style="color:grey;font-size:20px;margin-top:20px">
+                        <b>Period: ${periodRender}</b>
+                        <br>
+                        <b>Location: ${location}</b>
+                        <br><br>
+                        <b style="color:black;font-size:30px">Signups: ${signups}/${capacity}</b>
+                        <br>
+                        <button style="font-size:25px" class='signupTrigger' data-status=0 data-title='${title}' id='${title}' type='button'>Signup</button>
+                    </div>
+                    </div>`;
+                }
+                else if (render == "") {
+                    render = `<div class="box">
+                    <h1>${title}</h1>
+                    <div style="color:grey;font-size:20px;margin-top:20px">
+                        <b>Period: ${periodRender}</b>
+                        <br>
+                        <b>Location: ${location}</b>
+                        <br><br>
+                        <b style="color:black;font-size:30px">Signups: ${signups}/${capacity}</b>
+                    </div>
+                    </div>`;
+                }
+                document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
+            });
+            document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
+        }
+        liveRead("new/workshops", renderWorkshops);
+    </script>
+</head>
+
+<body>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span>
+        <div class="navBarRight"><span class="navBarItem">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop
+                Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span>
+        </div>
+    </div>
+    <div class="infoContainer">
+        <h3 class="title">Live Render</h3>
+        <p class="subTitle">Test</p>
+    </div>
+    <div class="gridContainer">
+        <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>
+        <div class="grid" id="p1">
+
+        </div>
+        <br>
+        <h1 style="font-size:45px;margin-bottom:20px">Period 2</h1>
+        <div class="grid" id="p2">
+
+        </div>
+        <br>
+        <h1 style="font-size:45px;margin-bottom:20px">Double Period 1 + 2</h1>
+        <div class="grid" id="p4">
+
+        </div>
+        <br>
+        <h1 style="font-size:45px;margin-bottom:20px">Period 3</h1>
+        <div class="grid" id="p3">
+
+        </div>
+    </div>
+</body>
+
+</html>

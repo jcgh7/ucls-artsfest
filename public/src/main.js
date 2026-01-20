@@ -7,7 +7,7 @@ import { ref, get, runTransaction, onValue } from "https://www.gstatic.com/fireb
 //   await signInWithPopup(auth, provider);
 // };
 
-let current = null;
+export let current = null;
 const subscribers = new Set();
 
 document.getElementById("auth").onclick = async () => {
@@ -27,10 +27,10 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("auth").innerHTML = "Logout";
     document.getElementById("name").innerHTML = "Signed in as " + user.displayName;
     const userAcc = await staticRead("new/users/"+user.uid);
-    if(userAcc == null){
-      writeLoc("new/users/"+user.uid, "email", user.email);
-      writeLoc("new/users/"+user.uid, "access", "standard");
-    }
+    await writeLoc("new/users/"+user.uid, "access", "standard");
+    await writeLoc("new/users/"+user.uid, "email", user.email);
+    await writeLoc("new/users/"+user.uid, "name", user.displayName);
+    document.cookie = user.uid;
     subscribers.forEach(cb => cb(user));
     current = user;
   } else {
