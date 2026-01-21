@@ -6,20 +6,6 @@
     <script type="module" src="./src/main.js"></script>
     <script type="module">
       import { staticRead, liveRead, writeLoc } from "./src/main.js";
-      // liveRead("tests", (x)=>{console.log(x)});
-      // writeLoc("tests", "test1", "test4");
-      // writeLoc("tests", "test2", "hello!");
-      // writeLoc("tests", "test1", "test5");
-      // writeLoc("new", "Description", "This is the database sector for the 2026 refactor of the Artsfest code.");
-      // writeLoc("new/workshops/Test Workshop 8", "capacity", 5);
-      // writeLoc("new/workshops/Test Workshop 8", "description", "This is a test workshop");
-      // writeLoc("new/workshops/Test Workshop 8", "period", 4);
-      // writeLoc("new/workshops/Test Workshop 8", "signups", 0);
-      // writeLoc("new/workshops/Test Workshop 8", "location", "C501");
-      //writeLoc("new/workshops/Test Workshop 3/signups-users", "BUna68oW41bywy2z3SlgIXU4JE22", 0);
-      // if((await staticRead("new/workshops/Test Workshop 3/signups-users/USER1"))==0){
-      //    console.log("balls")
-      // }
       let workshopData = await staticRead("new/workshops");
       Object.keys(workshopData).forEach(name => {
         let workshopDetails = Object.values(workshopData[name]);
