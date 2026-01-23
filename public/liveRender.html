@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./src/styles.css">
     <script type="module" src="./src/main.js"></script>
     <script type="module">
-        import { staticRead, liveRead, writeLoc, getUser, current } from "./src/main.js";
+        import { staticRead, liveRead, writeLoc, getUser, current} from "./src/main.js";
         async function handleSignup(data, status) {
 
             writeLoc("new/workshops/" + data + "/signups-users", document.cookie, status);
@@ -36,6 +36,9 @@
                             if (period == 4) {
                                 userPeriods[0] = true;
                                 userPeriods[1] = true;
+                            }
+                            if (period == 1 || period == 2){
+                                userPeriods[3] = true;
                             }
                         }
                     }
@@ -116,19 +119,49 @@
             });
             document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
         }
-        liveRead("new/workshops", renderWorkshops);
+        async function renderStatus(data){
+            if(data == 0){
+                document.getElementById("warn").innerHTML = "Signups are not active. This page will automatically render the signups once they become active, there is no need to refresh.";
+            }
+            else if(data == 1){
+                let uid = document.cookie;
+                let perms = await staticRead("/new/users/"+uid+"/access");
+                if(perms == "early"){
+                    document.getElementById("warn").innerHTML = "";
+                    liveRead("new/workshops", renderWorkshops);
+                }
+                else{
+                    document.getElementById("warn").innerHTML = "Signups are only active for workshop leaders. This page will automatically render the signups once they become active, there is no need to refresh.";
+                }
+            }
+            else if(data == 2){
+                document.getElementById("warn").innerHTML = "";
+                liveRead("new/workshops", renderWorkshops);
+            }
+            else if(data == 3){
+                alert("Workshop signup is closed.");
+                window.location.href = "/";
+            }
+            
+        }
+        liveRead("/new/state", renderStatus);
+        setTimeout(function(){ // jank 
+            if(current == null){
+                document.getElementById("warn").innerHTML = "You must be signed in to sign up for workshops.";
+                document.getElementById("p1").innerHTML = "";
+                document.getElementById("p2").innerHTML = "";
+                document.getElementById("p3").innerHTML = "";
+                document.getElementById("p4").innerHTML = "";
+            }
+        }, 500);
     </script>
 </head>
 
 <body>
-    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span>
-        <div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop
-                Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span>
-        </div>
-    </div>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" onclick="window.location.href = '/myWorkshops.html'" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
     <div class="infoContainer">
-        <h3 class="title">Live Render</h3>
-        <p class="subTitle">Test</p>
+        <h3 class="title">Workshop Signup</h3>
+        <p class="subTitle" id="warn"></p>
     </div>
     <div class="gridContainer">
         <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>

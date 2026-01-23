@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script type="module">
+        import { staticRead, liveRead, writeLoc, getUser, current} from "./src/main.js";
+        function renderWorkshops(data){
+            Object.keys(data).forEach(name => {
+                let workshopDetails = Object.values(data[name]);
+                let title = name;
+                let capacity = workshopDetails[0];
+                let description = workshopDetails[1];
+                let location = workshopDetails[2];
+                let period = workshopDetails[3];
+                let periodRender = workshopDetails[3];
+                let signups = workshopDetails[4];
+                let signupsUsers = workshopDetails[5];
+                let uid = document.cookie;
+                let render = "";
+                if (signupsUsers != undefined) {
+                    Object.entries(signupsUsers).forEach(([user, value]) => {
+                        if (user == uid && value == 0) {
+                            render = `<div class="box">
+                            <h1>${title}</h1>
+                            <div style="color:grey;font-size:20px;margin-top:20px">
+                                <b>Period: ${periodRender}</b>
+                                <br>
+                                <b>Location: ${location}</b>
+                                <br><br>
+                                <b style="color:black;font-size:30px">Signups: ${signups}/${capacity}</b>
+                            </div>
+                            </div>`;
+                            document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
+                        }
+                    }
+                    );
+                }
+            })
+        }
+        liveRead("/new/workshops", renderWorkshops);
+        setTimeout(function(){ // jank 
+            if(current == null){
+                document.getElementById("warn").innerHTML = "You must be signed in to view your workshops.";
+                document.getElementById("p1").innerHTML = "";
+                document.getElementById("p2").innerHTML = "";
+                document.getElementById("p3").innerHTML = "";
+                document.getElementById("p4").innerHTML = "";
+            }
+        }, 500);
+    </script>
+  </head>
+  <body>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" onclick="window.location.href = '/myWorkshops.html'" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="infoContainer">
+      <h3 class="title">My Workshops</h3>
+      <p class="subTitle" id="warn"></p>
+    </div>
+    <div class="gridContainer">
+      <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>
+      <div class="grid" id="p1">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 2</h1>
+      <div class="grid" id="p2">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Double Period 1 + 2</h1>
+      <div class="grid" id="p4">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 3</h1>
+      <div class="grid" id="p3">
+        
+      </div>
+    </div>
+  </body>
+</html>

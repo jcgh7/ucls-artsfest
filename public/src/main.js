@@ -12,6 +12,11 @@ const subscribers = new Set();
 
 document.getElementById("auth").onclick = async () => {
   if(current){
+    document.cookie.split(";").forEach(cookie => {
+  const eqPos = cookie.indexOf("=");
+  const name = eqPos > -1 ? cookie.slice(0, eqPos) : cookie;
+  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+});
     auth.signOut();
     window.location.href = "/";
   }
@@ -23,18 +28,27 @@ document.getElementById("auth").onclick = async () => {
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log("Signed in:", user);
+    if(user.email.indexOf("@ucls.uchicago.edu") == -1){
+      alert("Please sign in using your @ucls.uchicago.edu email");
+      setTimeout(function(){
+        auth.signOut();
+        window.location.href = "/";
+      }, 10);
+    }
+    else{
     document.getElementById("auth").innerHTML = "Logout";
-    document.getElementById("name").innerHTML = "Signed in as " + user.displayName;
+    document.getElementById("name").innerHTML = "My Workshops";
     const userAcc = await staticRead("new/users/"+user.uid);
-    await writeLoc("new/users/"+user.uid, "access", "standard");
+    if(await staticRead("new/users/"+user.uid+"/access") == null){
+      await writeLoc("new/users/"+user.uid, "access", "standard");
+    }
     await writeLoc("new/users/"+user.uid, "email", user.email);
     await writeLoc("new/users/"+user.uid, "name", user.displayName);
     document.cookie = user.uid;
     subscribers.forEach(cb => cb(user));
     current = user;
+    }
   } else {
-    console.log("Signed out");
     document.getElementById("name").innerHTML = "Not signed in"
     document.getElementById("auth").innerHTML = "Login";
   }
@@ -55,6 +69,11 @@ export function onUserChanged(callback) {
 }
 
 export function logout(){
+    document.cookie.split(";").forEach(cookie => {
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.slice(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+  });
   auth.signOut();
 }
 
