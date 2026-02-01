@@ -33,7 +33,7 @@ onAuthStateChanged(auth, async (user) => {
       setTimeout(function(){
         auth.signOut();
         window.location.href = "/";
-      }, 10);
+      }, 3000);
     }
     else{
     document.getElementById("auth").innerHTML = "Logout";
