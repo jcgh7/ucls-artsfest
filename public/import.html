@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script type="module">
+        import { writeLoc } from "./src/main.js";
+        import Papa from "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/+esm";
+        let response = await fetch("https://jacute.xyz/workshops2.csv").then(async (data) => {
+            let csvText = await data.text();
+            const records = Papa.parse(csvText, {
+                columns: true,       // first row = headers
+                skip_empty_lines: true,
+            });
+            console.log(records);
+
+            records.data.forEach((record) => {
+                let name = record[0];
+                let capacity = record[4];
+                let location = record[5];
+                let description = record[6];
+                let p1 = record[1];
+                let p2 = record[2];
+                let p3 = record[3];
+                let periods = [];
+                if (p1.indexOf("double") != -1) {
+                    periods.push(4);
+                }
+                if (p1.indexOf("x") != -1) {
+                    periods.push(1);
+                }
+                if (p2.indexOf("x") != -1) {
+                    periods.push(2);
+                }
+                if (p3.indexOf("x") != -1) {
+                    periods.push(3);
+                }
+                // periods.forEach((period) => {
+                //     console.log("-------------------Workshop-------------------");
+                //     console.log("Name: " + name);
+                //     console.log("Capacity: " + capacity);
+                //     console.log("Location: " + location);
+                //     console.log("Description: " + description);
+                //     console.log("Period: " + period);
+                // })
+                periods.forEach((period) => {
+                    writeLoc("new/workshops/"+name, "capacity", capacity);
+                    writeLoc("new/workshops/"+name, "location", location);
+                    writeLoc("new/workshops/"+name, "description", description);
+                    writeLoc("new/workshops/"+name, "period", period);
+                    writeLoc("new/workshops/"+name, "signups", 0);
+                });
+            });
+        });
+
+
+    </script>
+  </head>
+  <body>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="infoContainer">
+      <h3 class="title">Title</h3>
+      <p class="subTitle">Subtitle</p>
+    </div>
+    <!-- <div class="gridContainer">
+      <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>
+      <div class="grid" id="p1">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 2</h1>
+      <div class="grid" id="p2">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Double Period 1 + 2</h1>
+      <div class="grid" id="p4">
+        
+      </div>
+      <br>
+      <h1 style="font-size:45px;margin-bottom:20px">Period 3</h1>
+      <div class="grid" id="p3">
+        
+      </div>
+    </div> -->
+  </body>
+</html>

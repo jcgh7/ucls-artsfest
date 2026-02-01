@@ -115,6 +115,7 @@
                     </div>
                     </div>`;
                 }
+                console.log(`rendering ${render}`);
                 document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
             });
             document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
@@ -158,7 +159,7 @@
 </head>
 
 <body>
-    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" onclick="window.location.href = '/myWorkshops.html'" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
     <div class="infoContainer">
         <h3 class="title">Workshop Signup</h3>
         <p class="subTitle" id="warn"></p>

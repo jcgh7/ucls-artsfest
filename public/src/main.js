@@ -37,7 +37,7 @@ onAuthStateChanged(auth, async (user) => {
     }
     else{
     document.getElementById("auth").innerHTML = "Logout";
-    document.getElementById("name").innerHTML = "My Workshops";
+    document.getElementById("name").innerHTML = "Signed in as " + user.displayName;
     const userAcc = await staticRead("new/users/"+user.uid);
     if(await staticRead("new/users/"+user.uid+"/access") == null){
       await writeLoc("new/users/"+user.uid, "access", "standard");
