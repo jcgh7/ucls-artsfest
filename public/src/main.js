@@ -26,14 +26,13 @@ document.getElementById("auth").onclick = async () => {
   }
 };
 
-onAuthStateChanged(auth, async (user) => {
+const unsubscribe = onAuthStateChanged(auth, async (user) => {
   if (user) {
     if(user.email.indexOf("@ucls.uchicago.edu") == -1){
       alert("Please sign in using your @ucls.uchicago.edu email");
-      setTimeout(function(){
-        auth.signOut();
-        window.location.href = "/";
-      }, 3000);
+      unsubscribe();              // 🔑 stop the listener
+      await auth.signOut();       // safe now
+      window.location.replace("/"); // better than href
     }
     else{
     document.getElementById("auth").innerHTML = "Logout";
@@ -56,6 +55,15 @@ onAuthStateChanged(auth, async (user) => {
 
 export function getUser(){
   return current;
+}
+
+export function getCurrentUser() {
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
 }
 
 export function onUserChanged(callback) {

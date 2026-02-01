@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./src/styles.css">
     <script type="module" src="./src/main.js"></script>
     <script type="module">
-        import { staticRead, liveRead, writeLoc, getUser, current} from "./src/main.js";
+        import { getCurrentUser, liveRead, writeLoc, getUser, current, staticRead} from "./src/main.js";
         async function handleSignup(data, status) {
 
             writeLoc("new/workshops/" + data + "/signups-users", document.cookie, status);
@@ -115,7 +115,6 @@
                     </div>
                     </div>`;
                 }
-                console.log(`rendering ${render}`);
                 document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
             });
             document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
@@ -145,16 +144,17 @@
             }
             
         }
-        liveRead("/new/state", renderStatus);
-        setTimeout(function(){ // jank 
-            if(current == null){
+        
+            if(await getCurrentUser() == null){
                 document.getElementById("warn").innerHTML = "You must be signed in to sign up for workshops.";
                 document.getElementById("p1").innerHTML = "";
                 document.getElementById("p2").innerHTML = "";
                 document.getElementById("p3").innerHTML = "";
                 document.getElementById("p4").innerHTML = "";
             }
-        }, 1000);
+            else{
+                liveRead("/new/state", renderStatus);
+            }
     </script>
 </head>
 
