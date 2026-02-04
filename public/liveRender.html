@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="./src/styles.css">
     <script type="module" src="./src/main.js"></script>
     <script type="module">
-        import { getCurrentUser, liveRead, writeLoc, getUser, current, staticRead} from "./src/main.js";
+        import { getCurrentUser, liveRead, writeLoc, getUser, current, staticRead, getCookie} from "./src/main.js";
         async function handleSignup(data, status) {
 
-            writeLoc("new/workshops/" + data + "/signups-users", document.cookie, status);
+            writeLoc("new/workshops/" + data + "/signups-users", getCookie("uid"), status);
             if(status == 1){
                 writeLoc("new/workshops/" + data, "signups", (await staticRead("new/workshops/" + data + "/signups"))-1);
             }
@@ -23,7 +23,7 @@
             document.getElementById("p2").innerHTML = "";
             document.getElementById("p3").innerHTML = "";
             document.getElementById("p4").innerHTML = "";
-            let uid = document.cookie;
+            let uid = getCookie("uid");
             let userPeriods = [false, false, false, false]; //p1, p2, p3, p12
             Object.keys(data).forEach(name => {
                 let workshopDetails = Object.values(data[name]);
@@ -115,6 +115,7 @@
                     </div>
                     </div>`;
                 }
+                console.log("attempting to render " + title);
                 document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
             });
             document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
@@ -124,14 +125,16 @@
                 document.getElementById("warn").innerHTML = "Signups are not active. This page will automatically render the signups once they become active, there is no need to refresh.";
             }
             else if(data == 1){
-                let uid = document.cookie;
+                let uid = getCookie("uid");
+                console.log("reading " + "/new/users/"+uid+"/access");
                 let perms = await staticRead("/new/users/"+uid+"/access");
+                console.log("read " + perms);
                 if(perms == "early"){
                     document.getElementById("warn").innerHTML = "";
                     liveRead("new/workshops", renderWorkshops);
                 }
                 else{
-                    document.getElementById("warn").innerHTML = "Signups are only active for workshop leaders. This page will automatically render the signups once they become active, there is no need to refresh.";
+                    document.getElementById("warn").innerHTML = "Signups are only active for workshop leaders. If you are a workshop leader, try refreshing the page a few times.";
                 }
             }
             else if(data == 2){
@@ -162,7 +165,7 @@
     <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
     <div class="infoContainer">
         <h3 class="title">Workshop Signup</h3>
-        <p class="subTitle" id="warn"></p>
+        <p class="subTitle" id="warn">Rendering...</p>
     </div>
     <div class="gridContainer">
         <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>

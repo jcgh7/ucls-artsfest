@@ -17,7 +17,7 @@
                 let periodRender = workshopDetails[3];
                 let signups = workshopDetails[4];
                 let signupsUsers = workshopDetails[5];
-                let uid = document.cookie;
+                let uid = getCookie("uid");
                 let render = "";
                 if (signupsUsers != undefined) {
                     Object.entries(signupsUsers).forEach(([user, value]) => {

@@ -7,15 +7,15 @@
     <script>
         window.onload = ()=>{
             const urlParams = new URLSearchParams(window.location.search);
-            document.getElementById("n").innerHTML = urlParams.get('n');
-            document.getElementById("d").innerHTML = urlParams.get('d');
-            p = urlParams.get("p");
+            document.getElementById("n").innerHTML = decodeURIComponent(escape(atob(urlParams.get('n'))));
+            document.getElementById("d").innerHTML = decodeURIComponent(escape(atob(urlParams.get('d'))));
+            p = decodeURIComponent(escape(atob(urlParams.get("p"))));
             if(p == 4){
                 p = "1 & 2";
             }
-            document.getElementById("l").innerHTML = "Location: " + urlParams.get('l');
+            document.getElementById("l").innerHTML = "Location: " + decodeURIComponent(escape(atob(urlParams.get('l'))));
             document.getElementById("p").innerHTML = "Period: " + p;
-            document.getElementById("c").innerHTML = "Capacity: " + urlParams.get('c');
+            document.getElementById("c").innerHTML = "Capacity: " + decodeURIComponent(escape(atob(urlParams.get('c'))));
         }
     </script>
   </head>

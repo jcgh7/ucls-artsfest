@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>U-High Artsfest</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="module" src="./src/main.js"></script>
+    <script type="module">
+        import { getCurrentUser, liveRead, writeLoc, getUser, current, staticRead, getUserIdFromName} from "./src/main.js";
+        let x = await staticRead("new/users");
+        console.log(x);
+    </script>
+  </head>
+  <body>
+    <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
+    <div class="infoContainer">
+      <h3 class="title">Title</h3>
+      <p class="subTitle" id="output">Output</p>
+    </div>
+  </body>
+</html>

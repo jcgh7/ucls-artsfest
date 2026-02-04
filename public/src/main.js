@@ -35,11 +35,11 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
       window.location.replace("/");
     }
     else {
+      setCookie("uid", user.uid);
       document.getElementById("auth").innerHTML = "Logout";
       document.getElementById("name").innerHTML = "Signed in as " + user.displayName;
       const userAcc = await staticRead("new/users/" + user.uid);
-      if (await staticRead("new/users/" + user.uid + "/access") == null) {
-        await writeLoc("new/users/" + user.uid, "access", "standard");
+      if (true) {
         const names = [ // holy jank
           "Brown",
           "Podszus",
@@ -186,21 +186,23 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
           "Oyler",
           "Lindau",
           "Yu", 
-          "Hubbard"
+          "Hubbard",
+          "Shirrell"
         ];
+        let set = false;
         for (const lastName of names) {
           if (user.displayName.split(" ")[user.displayName.split(" ").length - 1] == lastName) {
             await writeLoc(`new/users/${user.uid}`, "access", "early");
+            set = true;
           }
         }
-
-        await writeLoc(`new/users/${user.uid}`, "email", user.email);
-        await writeLoc(`new/users/${user.uid}`, "name", user.displayName);
-
+        if(!set){
+          await writeLoc("new/users/" + user.uid, "access", "standard");
+        }
       }
+      
       await writeLoc("new/users/" + user.uid, "email", user.email);
       await writeLoc("new/users/" + user.uid, "name", user.displayName);
-      document.cookie = user.uid;
       subscribers.forEach(cb => cb(user));
       current = user;
     }
@@ -210,9 +212,22 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
   }
 });
 
+export function getUserIdFromName(name){
+  let users = staticRead("new/users");
+  console.log(users);
+}
+
 export function getUser() {
   return current;
 }
+
+export function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="))
+    ?.split("=")[1] ?? null;
+}
+
 
 export function getCurrentUser() {
   return new Promise((resolve) => {
@@ -241,6 +256,14 @@ export function logout() {
   });
   auth.signOut();
 }
+
+export function setCookie(name, value, days = 7) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie =
+    `${encodeURIComponent(name)}=${encodeURIComponent(value)}; ` +
+    `expires=${expires}; path=/; SameSite=Lax`;
+}
+
 
 const workshopsRef = ref(db, "workshops");
 
