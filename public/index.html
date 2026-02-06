@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="./src/styles.css">
     <script type="module" src="./src/main.js"></script>
     <script type="module">
-      import { staticRead, liveRead, writeLoc } from "./src/main.js";
+      import { staticRead, liveRead, writeLoc, initWatchdog } from "./src/main.js";
       let workshopData = await staticRead("new/workshops");
       Object.keys(workshopData).forEach(name => {
         let workshopDetails = Object.values(workshopData[name]);
@@ -18,7 +18,6 @@
         if(period == 4){
           periodRender = "1 & 2";
         }
-        console.log("rendering " + title);
         let render = `<div class="box">
           <h1>${title}</h1>
           <div style="color:grey;font-size:20px;margin-top:20px">
@@ -33,7 +32,6 @@
         </div>`;
         document.getElementById("p"+period).innerHTML = document.getElementById("p"+period).innerHTML + render;
       });
-
       
     </script>
   </head>
@@ -41,7 +39,6 @@
     <div class="navBar"><span class="logo" onclick="window.location.href='/'">U-High Artsfest</span><div class="navBarRight"><span class="navBarItem" onclick="window.location.href='/about.html'">About</span>|<span class="navBarItem" onclick="window.location.href ='/liveRender.html'">Workshop Signup</span>|<span id="name" class="navBarItem"></span>|<span id="auth" class="navBarItem"></span></div></div>
     <div class="infoContainer">
       <h3 class="title">Browse Workshops</h3>
-      <p class="subtitle">We are aware some workshop leaders are facing issues signing up for workshops, and are working to fix the issue.</p>
     </div>
     <div class="gridContainer">
       <h1 style="font-size:45px;margin-bottom:20px">Period 1</h1>

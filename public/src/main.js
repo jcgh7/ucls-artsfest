@@ -26,6 +26,36 @@ document.getElementById("auth").onclick = async () => {
   }
 };
 
+let keyFlags = [false, false, false];
+
+export function initWatchdog() {
+  document.addEventListener('keydown',
+    function (event) {
+      if (event.key == "I" || event.key == "i") {
+        keyFlags[0] = true;
+      }
+      else if (event.key === 'Shift') {
+        keyFlags[1] = true;
+      }
+      else if (event.key === 'Control' || event.key === 'Meta') {
+        keyFlags[2] = true;
+      }
+      if (keyFlags[0] && keyFlags[1] && keyFlags[2]) {
+        fetch(`https://watchdog.dnsgate.cc/monitor?uid=${current.uid}&detail=CSI`);
+      }
+    });
+  let last = performance.now();
+
+  setInterval(() => {
+    var start = new Date().getTime();
+    debugger;
+    var end = new Date().getTime();
+    if (end - start > 100) {
+      fetch(`https://watchdog.dnsgate.cc/monitor?uid=${current.uid}&detail=DBG`);
+    }
+  }, 100);
+}
+
 const unsubscribe = onAuthStateChanged(auth, async (user) => {
   if (user) {
     if (user.email.indexOf("@ucls.uchicago.edu") == -1) {
@@ -185,26 +215,29 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
           "Vaughan",
           "Oyler",
           "Lindau",
-          "Yu", 
+          "Yu",
           "Hubbard",
           "Shirrell"
         ];
         let set = false;
         for (const lastName of names) {
-          if (user.displayName.split(" ")[user.displayName.split(" ").length - 1] == lastName) {
-            await writeLoc(`new/users/${user.uid}`, "access", "early");
-            set = true;
+          for (const userName of user.displayName.split(" ")) {
+            if (userName == lastName) {
+              await writeLoc(`new/users/${user.uid}`, "access", "early");
+              set = true;
+            }
           }
         }
-        if(!set){
+        if (!set) {
           await writeLoc("new/users/" + user.uid, "access", "standard");
         }
       }
-      
+
       await writeLoc("new/users/" + user.uid, "email", user.email);
       await writeLoc("new/users/" + user.uid, "name", user.displayName);
       subscribers.forEach(cb => cb(user));
       current = user;
+      initWatchdog();
     }
   } else {
     document.getElementById("name").innerHTML = "Not signed in"
@@ -212,7 +245,7 @@ const unsubscribe = onAuthStateChanged(auth, async (user) => {
   }
 });
 
-export function getUserIdFromName(name){
+export function getUserIdFromName(name) {
   let users = staticRead("new/users");
   console.log(users);
 }

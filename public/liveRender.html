@@ -115,7 +115,6 @@
                     </div>
                     </div>`;
                 }
-                console.log("attempting to render " + title);
                 document.getElementById("p" + period).innerHTML = document.getElementById("p" + period).innerHTML + render;
             });
             document.querySelectorAll(".signupTrigger").forEach(btn => btn.addEventListener("click", () => { handleSignup(btn.dataset.title, btn.dataset.status); }));
@@ -126,9 +125,7 @@
             }
             else if(data == 1){
                 let uid = getCookie("uid");
-                console.log("reading " + "/new/users/"+uid+"/access");
                 let perms = await staticRead("/new/users/"+uid+"/access");
-                console.log("read " + perms);
                 if(perms == "early"){
                     document.getElementById("warn").innerHTML = "";
                     liveRead("new/workshops", renderWorkshops);
